@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { useAccount, useBalance } from "wagmi";
+import { useAccount } from "wagmi"; //useBalance
 import { useGlobalState } from "@/context/GlobalContext";
-import { isValidAddress } from "@/utils";
+// import { isValidAddress } from "@/utils";
 import { motion } from "framer-motion";
 import { slideIn, fadeIn, buttonHover } from "@/utils/animations";
 import { ArrowDownIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
@@ -59,7 +59,7 @@ export default function SwapForm() {
     } catch (error) {
       setState((prev) => ({
         ...prev,
-        error: "Insufficient balance for swap",
+        error: "Insufficient balance for swap" + error,
       }));
     }
   };

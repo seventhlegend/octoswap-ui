@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useAccount } from "wagmi";
-import { formatDateTime, shortenAddress } from "@/utils";
-import { useGlobalState } from "@/context/GlobalContext";
+// import { useAccount } from "wagmi";
+import { formatDateTime } from "@/utils"; //shortenAddress
+// import { useGlobalState } from "@/context/GlobalContext";
 
 // Define types for transactions and sorting/filtering
 type TransactionType = "swap" | "addLiquidity" | "removeLiquidity" | "all";
@@ -32,8 +32,8 @@ interface TransactionHistoryState {
 }
 
 export default function TransactionHistory() {
-  const { address } = useAccount();
-  const { state } = useGlobalState();
+  //   const { address } = useAccount();
+  //   const { state } = useGlobalState();
 
   // Local state management
   const [historyState, setHistoryState] = useState<TransactionHistoryState>({
