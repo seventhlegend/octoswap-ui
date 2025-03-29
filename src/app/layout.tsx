@@ -11,7 +11,7 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "SomniSwap DEX",
+  title: "RoarySwap DEX",
   description: "Decentralized Exchange powered by Next.js",
 };
 
