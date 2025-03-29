@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="font-bold text-lg mb-4">SomniSwap</h3>
+            <h3 className="font-bold text-lg mb-4">RoarySwap</h3>
             <p className="text-gray-600 dark:text-gray-400">
               The next generation decentralized exchange platform
             </p>
@@ -19,7 +19,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://docs.somniswap.com"
+                  href="https://docs.RoarySwap.com"
                   className="hover:underline"
                 >
                   Documentation
@@ -27,7 +27,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://github.com/somniswap"
+                  href="https://github.com/RoarySwap"
                   className="hover:underline"
                 >
                   GitHub
@@ -40,7 +40,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <a
-                  href="https://twitter.com/somniswap"
+                  href="https://twitter.com/RoarySwap"
                   className="hover:underline"
                 >
                   Twitter
@@ -48,7 +48,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://discord.gg/somniswap"
+                  href="https://discord.gg/RoarySwap"
                   className="hover:underline"
                 >
                   Discord
@@ -56,7 +56,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:contact@somniswap.com"
+                  href="mailto:contact@RoarySwap.com"
                   className="hover:underline"
                 >
                   Contact

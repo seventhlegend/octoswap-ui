@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div className="container mx-auto px-4 py-12">
       <section className="text-center mb-16">
-        <h1 className="text-5xl font-bold mb-6">Welcome to SomniSwap</h1>
+        <h1 className="text-5xl font-bold mb-6">Welcome to RoarySwap</h1>
         <p className="text-xl text-gray-600 dark:text-gray-300">
           The next generation decentralized exchange platform
         </p>
