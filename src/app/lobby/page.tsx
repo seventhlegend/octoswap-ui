@@ -80,6 +80,14 @@ const contractABI = [
 
 const contractAddress = "0xd8b6aEED62F79e39f1F776c09783543FD6DcA1AD";
 
+// Define proper types for contract responses
+interface MessageResult {
+  a1: bigint;
+  b1: bigint;
+  c1: string;
+  d1: string;
+}
+
 interface Message {
   id: string;
   timestamp: bigint;
@@ -112,7 +120,7 @@ export default function LobbyPage() {
   const [hasNewMessages, setHasNewMessages] = useState(false);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
   const messageEndRef = useRef<HTMLDivElement>(null);
-  const { isConnected, address } = useAccount(); // address kullanılmıyor ama ileride kullanılabilir
+  const { isConnected } = useAccount(); // address kullanılmıyor ama ileride kullanılabilir
 
   // Read current fee
   const { data: fee } = useReadContract({
@@ -144,15 +152,15 @@ export default function LobbyPage() {
     }
   }, [receipt, refetchMessages]);
 
-  // Format messages for display
-  const formattedMessages: Message[] = ((recentMessages as any[]) || []).map(
-    (msg) => ({
-      id: String(msg.a1),
-      timestamp: BigInt(msg.b1),
-      sender: msg.c1,
-      content: msg.d1,
-    })
-  );
+  // Format messages for display with proper typing
+  const formattedMessages: Message[] = (
+    (recentMessages as MessageResult[] | undefined) || []
+  ).map((msg) => ({
+    id: String(msg.a1),
+    timestamp: msg.b1,
+    sender: msg.c1,
+    content: msg.d1,
+  }));
 
   // Auto-refresh messages every 15 seconds
   useEffect(() => {
@@ -217,7 +225,7 @@ export default function LobbyPage() {
         abi: contractABI,
         functionName: "x",
         args: [messageInput],
-        value: fee as any,
+        value: typeof fee === "bigint" ? fee : BigInt(0), // Ensure fee is treated as bigint
       });
       setMessageInput("");
     } catch (error) {
