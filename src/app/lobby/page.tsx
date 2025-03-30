@@ -118,8 +118,8 @@ export default function LobbyPage() {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [lastMessageCount, setLastMessageCount] = useState(0);
   const [hasNewMessages, setHasNewMessages] = useState(false);
+  const messageContainerRef = useRef<HTMLDivElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
-  const messageEndRef = useRef<HTMLDivElement>(null);
   const { isConnected } = useAccount(); // address kullanılmıyor ama ileride kullanılabilir
 
   // Read current fee
@@ -189,11 +189,6 @@ export default function LobbyPage() {
     }
   }, [formattedMessages, lastMessageCount]);
 
-  // Scroll to bottom when new messages arrive
-  useEffect(() => {
-    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [formattedMessages]);
-
   // Close emoji picker when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -236,6 +231,14 @@ export default function LobbyPage() {
   // Format address for display
   const shortenAddress = (addr: string) => {
     return `${addr.substring(0, 6)}...${addr.substring(addr.length - 4)}`;
+  };
+
+  // Add a function to scroll to bottom when user clicks a button
+  const scrollToBottom = () => {
+    if (!messageContainerRef.current) return;
+
+    messageContainerRef.current.scrollTop =
+      messageContainerRef.current.scrollHeight;
   };
 
   return (
@@ -414,7 +417,10 @@ export default function LobbyPage() {
             </div>
           </div>
 
-          <div className="space-y-3 max-h-80 overflow-y-auto pr-1 custom-scrollbar">
+          <div
+            ref={messageContainerRef}
+            className="space-y-3 max-h-80 overflow-y-auto pr-1 custom-scrollbar"
+          >
             {formattedMessages && formattedMessages.length > 0 ? (
               formattedMessages.map((msg, index) => (
                 <motion.div
@@ -455,8 +461,18 @@ export default function LobbyPage() {
                 </p>
               </div>
             )}
-            <div ref={messageEndRef} />
           </div>
+
+          {formattedMessages.length > 4 && (
+            <div className="text-center mt-3">
+              <button
+                onClick={scrollToBottom}
+                className="text-xs bg-purple-600/50 hover:bg-purple-600/70 text-white py-1 px-3 rounded-full transition-colors"
+              >
+                Oldest Messages ↓
+              </button>
+            </div>
+          )}
 
           {/* Auto-refresh indicator */}
           <div className="mt-4 text-center text-xs text-white/40">
