@@ -13,19 +13,65 @@ import {
   ExclamationCircleIcon,
 } from "@heroicons/react/24/solid";
 
+// Contract addresses
 const ROARY_ERC20 = "0xD09cc9CB421b63F336247Bf507796489E04f1026";
 const ROARY_NFT = "0x424ff3138490c4cEf110E5Ac32f9D111465b6C9b";
 const ROARY_ERC1155 = "0x2Bf5fE4a2D83c7bCECB1fd021A468665c5edDAC1";
 
+// Define proper types for contract ABIs
+interface MintFunction {
+  name: "mint";
+  type: "function";
+  stateMutability: "payable";
+  inputs: never[];
+  outputs?: never[];
+}
+
+type ContractABI = readonly [MintFunction];
+
 const erc20Abi = [
   { name: "mint", type: "function", stateMutability: "payable", inputs: [] },
-];
+] as const satisfies ContractABI;
+
 const nftAbi = [
   { name: "mint", type: "function", stateMutability: "payable", inputs: [] },
-];
+] as const satisfies ContractABI;
+
 const erc1155Abi = [
   { name: "mint", type: "function", stateMutability: "payable", inputs: [] },
-];
+] as const satisfies ContractABI;
+
+// Define contract configuration type
+type TokenType = "erc20" | "nft" | "erc1155";
+
+interface ContractConfig {
+  address: `0x${string}`;
+  abi: ContractABI;
+  name: string;
+  buttonClass: string;
+}
+
+// Create a mapping of token types to their configurations
+const CONTRACT_CONFIGS: Record<TokenType, ContractConfig> = {
+  erc20: {
+    address: ROARY_ERC20 as `0x${string}`,
+    abi: erc20Abi,
+    name: "RoaryToken (ERC20)",
+    buttonClass: "bg-purple-600 hover:bg-purple-700 text-white",
+  },
+  nft: {
+    address: ROARY_NFT as `0x${string}`,
+    abi: nftAbi,
+    name: "RoaryNFT (ERC721)",
+    buttonClass: "bg-indigo-600 hover:bg-indigo-700 text-white",
+  },
+  erc1155: {
+    address: ROARY_ERC1155 as `0x${string}`,
+    abi: erc1155Abi,
+    name: "RoaryERC1155",
+    buttonClass: "bg-fuchsia-600 hover:bg-fuchsia-700 text-white",
+  },
+};
 
 interface MintStatus {
   type: "error" | "success" | "loading" | "idle";
@@ -63,19 +109,19 @@ export default function MintPage() {
     }
   }, [isSuccess]);
 
-  const handleMint = async (contract: string, abi: any[]) => {
+  const handleMint = async (tokenType: TokenType) => {
     try {
       setMintStatus({
         type: "loading",
         message: "Waiting for confirmation...",
       });
 
+      const config = CONTRACT_CONFIGS[tokenType];
       const hash = await writeContractAsync({
-        address: contract as `0x${string}`,
-        abi,
+        address: config.address,
+        abi: config.abi,
         functionName: "mint",
         value: parseEther("0.01"),
-        args: [],
       });
 
       setMintStatus({
@@ -163,66 +209,31 @@ export default function MintPage() {
             Roary Minting Hub
           </h1>
           <div className="space-y-4">
-            {/* Mint buttons */}
-            <button
-              onClick={() => handleMint(ROARY_ERC20, erc20Abi)}
-              disabled={!isConnected || isPending || isConfirming}
-              className={`w-full py-3 rounded-xl flex items-center justify-center space-x-2 
-                ${
-                  !isConnected
-                    ? "bg-gray-700 text-gray-400 cursor-not-allowed"
-                    : "bg-purple-600 hover:bg-purple-700 text-white"
-                } transition-colors`}
-            >
-              {isPending || isConfirming ? (
-                <>
-                  <LoadingSpinner />
-                  <span>{isPending ? "Confirming..." : "Processing..."}</span>
-                </>
-              ) : (
-                "Mint RoaryToken (ERC20)"
-              )}
-            </button>
-
-            <button
-              onClick={() => handleMint(ROARY_NFT, nftAbi)}
-              disabled={!isConnected || isPending || isConfirming}
-              className={`w-full py-3 rounded-xl flex items-center justify-center space-x-2 
-                ${
-                  !isConnected
-                    ? "bg-gray-700 text-gray-400 cursor-not-allowed"
-                    : "bg-indigo-600 hover:bg-indigo-700 text-white"
-                } transition-colors`}
-            >
-              {isPending || isConfirming ? (
-                <>
-                  <LoadingSpinner />
-                  <span>{isPending ? "Confirming..." : "Processing..."}</span>
-                </>
-              ) : (
-                "Mint RoaryNFT (ERC721)"
-              )}
-            </button>
-
-            <button
-              onClick={() => handleMint(ROARY_ERC1155, erc1155Abi)}
-              disabled={!isConnected || isPending || isConfirming}
-              className={`w-full py-3 rounded-xl flex items-center justify-center space-x-2 
-                ${
-                  !isConnected
-                    ? "bg-gray-700 text-gray-400 cursor-not-allowed"
-                    : "bg-fuchsia-600 hover:bg-fuchsia-700 text-white"
-                } transition-colors`}
-            >
-              {isPending || isConfirming ? (
-                <>
-                  <LoadingSpinner />
-                  <span>{isPending ? "Confirming..." : "Processing..."}</span>
-                </>
-              ) : (
-                "Mint RoaryERC1155"
-              )}
-            </button>
+            {/* Mint buttons - now using TokenType */}
+            {(
+              Object.entries(CONTRACT_CONFIGS) as [TokenType, ContractConfig][]
+            ).map(([tokenType, config]) => (
+              <button
+                key={tokenType}
+                onClick={() => handleMint(tokenType)}
+                disabled={!isConnected || isPending || isConfirming}
+                className={`w-full py-3 rounded-xl flex items-center justify-center space-x-2 
+                    ${
+                      !isConnected
+                        ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                        : config.buttonClass
+                    } transition-colors`}
+              >
+                {isPending || isConfirming ? (
+                  <>
+                    <LoadingSpinner />
+                    <span>{isPending ? "Confirming..." : "Processing..."}</span>
+                  </>
+                ) : (
+                  `Mint ${config.name}`
+                )}
+              </button>
+            ))}
           </div>
 
           {mintStatus.txHash && (
