@@ -13,6 +13,30 @@ import { motion } from "framer-motion";
 //   ExclamationCircleIcon,
 // } from "@heroicons/react/24/solid";
 
+// Define more specific types for our factory ABIs
+// interface Erc20DeployParams {
+//   name: string;
+//   symbol: string;
+//   initialSupply: bigint;
+// }
+
+// interface Erc721DeployParams {
+//   name: string;
+//   symbol: string;
+//   baseURI: string;
+// }
+
+// interface Erc1155DeployParams {
+//   baseURI: string;
+// }
+
+// // Type mapping for contract function arguments
+// type DeployArgsMap = {
+//   erc20: [string, string, bigint]; // [name, symbol, initialSupply]
+//   erc721: [string, string, string]; // [name, symbol, baseURI]
+//   erc1155: [string]; // [baseURI]
+// };
+
 const FACTORIES = {
   erc20: {
     address: "0xb3d56fEbb483991985D912D6138c1311d5793C37" as `0x${string}`,
@@ -28,7 +52,7 @@ const FACTORIES = {
         ],
         outputs: [{ name: "", type: "address" }],
       },
-    ],
+    ] as const,
   },
   erc721: {
     address: "0x835c39F6284Ad6dC83b01b1711a0bBbdb94156f6" as `0x${string}`,
@@ -44,7 +68,7 @@ const FACTORIES = {
         ],
         outputs: [{ name: "", type: "address" }],
       },
-    ],
+    ] as const,
   },
   erc1155: {
     address: "0xc6036c2e7c0CA37100BFECA46A962686D2C4308B" as `0x${string}`,
@@ -56,7 +80,7 @@ const FACTORIES = {
         inputs: [{ name: "baseURI", type: "string" }],
         outputs: [{ name: "", type: "address" }],
       },
-    ],
+    ] as const,
   },
 };
 
@@ -77,27 +101,39 @@ export default function DeployPage() {
   });
 
   const handleDeploy = async () => {
-    const config = FACTORIES[form.type as keyof typeof FACTORIES];
-    let args: any[] = [];
-
-    if (form.type === "erc20") {
-      args = [form.name, form.symbol, BigInt(form.supply)];
-    } else if (form.type === "erc721") {
-      args = [form.name, form.symbol, form.baseURI];
-    } else if (form.type === "erc1155") {
-      args = [form.baseURI];
-    }
+    const contractType = form.type as keyof typeof FACTORIES;
 
     try {
       setStatus("⏳ Sending transaction...");
-      const hash = await writeContractAsync({
-        address: config.address,
-        abi: config.abi,
-        functionName:
-          form.type === "erc20" ? "deployToken" : "deployCollection",
-        args,
-        value: parseEther("0.01"),
-      });
+      let hash: `0x${string}`;
+
+      if (contractType === "erc20") {
+        hash = await writeContractAsync({
+          address: FACTORIES.erc20.address,
+          abi: FACTORIES.erc20.abi,
+          functionName: "deployToken",
+          args: [form.name, form.symbol, BigInt(form.supply)],
+          value: parseEther("0.01"),
+        });
+      } else if (contractType === "erc721") {
+        hash = await writeContractAsync({
+          address: FACTORIES.erc721.address,
+          abi: FACTORIES.erc721.abi,
+          functionName: "deployCollection",
+          args: [form.name, form.symbol, form.baseURI],
+          value: parseEther("0.01"),
+        });
+      } else {
+        // erc1155
+        hash = await writeContractAsync({
+          address: FACTORIES.erc1155.address,
+          abi: FACTORIES.erc1155.abi,
+          functionName: "deployCollection",
+          args: [form.baseURI],
+          value: parseEther("0.01"),
+        });
+      }
+
       setTxHash(hash);
       setStatus("🚀 Transaction sent. Waiting for confirmation...");
     } catch (err) {
