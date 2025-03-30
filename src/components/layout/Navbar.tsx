@@ -11,9 +11,10 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { name: "Swap", href: "/swap" },
-    // { name: "Liquidity", href: "/liquidity" },
-    // { name: "History", href: "/history" },
+    { name: "Swap", href: "" },
+    { name: "Lobby", href: "/lobby" },
+    { name: "Mint", href: "/mint" },
+    { name: "Deploy", href: "/deploy" },
     { name: "About", href: "/about" },
   ];
 
