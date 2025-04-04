@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ArrowUpDown, Info, Settings } from "lucide-react";
 import { useAccount, useBalance, useWriteContract } from "wagmi";
-import { parseEther, parseUnits, formatUnits } from "viem";
+import { parseUnits, formatUnits } from "viem";
 
 // Token selection interface
 interface Token {

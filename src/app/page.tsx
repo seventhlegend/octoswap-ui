@@ -1,4 +1,4 @@
-import { ArrowUpDown, Info, Settings } from "lucide-react";
+// import { ArrowUpDown, Info, Settings } from "lucide-react";
 import SwapCard from "@/components/swap/SwapCard";
 
 export default function Home() {
