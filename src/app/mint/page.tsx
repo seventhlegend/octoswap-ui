@@ -57,19 +57,19 @@ const CONTRACT_CONFIGS: Record<TokenType, ContractConfig> = {
     address: ROARY_ERC20 as `0x${string}`,
     abi: erc20Abi,
     name: "RoaryToken (ERC20)",
-    buttonClass: "bg-purple-600 hover:bg-purple-700 text-white",
+    buttonClass: "bg-[#011e50] hover:bg-blue-700 text-white",
   },
   nft: {
     address: ROARY_NFT as `0x${string}`,
     abi: nftAbi,
     name: "RoaryNFT (ERC721)",
-    buttonClass: "bg-indigo-600 hover:bg-indigo-700 text-white",
+    buttonClass: "bg-[#011e50] hover:bg-blue-700 text-white",
   },
   erc1155: {
     address: ROARY_ERC1155 as `0x${string}`,
     abi: erc1155Abi,
     name: "RoaryERC1155",
-    buttonClass: "bg-fuchsia-600 hover:bg-fuchsia-700 text-white",
+    buttonClass: "bg-[#011e50] hover:bg-blue-700 text-white",
   },
 };
 
@@ -108,6 +108,14 @@ export default function MintPage() {
       return () => clearTimeout(timer);
     }
   }, [isSuccess]);
+
+  // Add useEffect to set body attribute
+  useEffect(() => {
+    document.body.setAttribute("data-page", "mint");
+    return () => {
+      document.body.removeAttribute("data-page");
+    };
+  }, []);
 
   const handleMint = async (tokenType: TokenType) => {
     try {
@@ -178,20 +186,32 @@ export default function MintPage() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-indigo-900 via-purple-800 to-fuchsia-700 py-12 px-4">
-      <div className="max-w-md w-full">
+    <div className="min-h-screen flex flex-col items-center justify-center py-12 px-4">
+      {/* Background Image */}
+      <div
+        className="fixed inset-0 z-0"
+        style={{
+          backgroundImage: 'url("/mint.jpg")',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+
+      {/* Content with higher z-index */}
+      <div className="relative z-10 max-w-md w-full">
         {/* Status Messages */}
         {mintStatus.message && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`mb-6 p-4 rounded-lg flex items-center ${
+            className={`mb-6 p-4 rounded-lg flex items-center backdrop-blur-sm ${
               mintStatus.type === "error"
                 ? "bg-red-900/30 border-red-500/50"
                 : mintStatus.type === "success"
                 ? "bg-green-900/30 border-green-500/50"
                 : "bg-blue-900/30 border-blue-500/50"
-            } border backdrop-blur-sm`}
+            } border`}
           >
             {mintStatus.type === "error" ? (
               <ExclamationCircleIcon className="h-5 w-5 text-red-400 mr-3" />
@@ -204,8 +224,8 @@ export default function MintPage() {
           </motion.div>
         )}
 
-        <div className="bg-black/30 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl">
-          <h1 className="text-white text-2xl font-bold text-center mb-6">
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-8 border border-gray-200">
+          <h1 className="text-[#011e50] text-2xl font-bold text-center mb-6">
             Roary Minting Hub
           </h1>
           <div className="space-y-4">
@@ -220,7 +240,7 @@ export default function MintPage() {
                 className={`w-full py-3 rounded-xl flex items-center justify-center space-x-2 
                     ${
                       !isConnected
-                        ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                         : config.buttonClass
                     } transition-colors`}
               >
@@ -254,11 +274,11 @@ export default function MintPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-6 text-center bg-white/10 backdrop-blur-md rounded-xl px-8 py-6 text-white border border-white/10"
+            className="mt-6 text-center bg-white/80 backdrop-blur-md rounded-xl px-8 py-6 text-[#011e50] border border-gray-200 shadow-lg"
           >
             <div className="mb-2">
               <svg
-                className="w-12 h-12 mx-auto text-purple-400/70"
+                className="w-12 h-12 mx-auto text-[#011e50]/70"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -274,7 +294,7 @@ export default function MintPage() {
             <p className="font-medium text-lg">
               Connect your wallet to start minting
             </p>
-            <p className="text-sm text-white/60 mt-1">
+            <p className="text-sm text-[#011e50]/60 mt-1">
               Use the connect button in the navigation bar
             </p>
           </motion.div>

@@ -1,44 +1,23 @@
-import Link from "next/link";
+import { ArrowUpDown, Info, Settings } from "lucide-react";
+import SwapCard from "@/components/swap/SwapCard";
 
 export default function Home() {
   return (
-    <div className="container mx-auto px-4 py-12">
-      <section className="text-center mb-16">
-        <h1 className="text-5xl font-bold mb-6">Welcome to RoarySwap</h1>
-        <p className="text-xl text-gray-600 dark:text-gray-300">
-          The next generation decentralized exchange platform
-        </p>
-      </section>
+    <div className="min-h-screen w-full flex flex-col items-center justify-center px-4 md:px-12 py-10">
+      <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Left: Welcome Section */}
+        <div className="flex flex-col justify-center space-y-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-[#001E50]">
+            Welcome to RoarySwap
+          </h1>
+          <p className="text-gray-600 text-lg">
+            Swap tokens seamlessly across chains with our cross-chain DEX
+            powered by RoarySwap.
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {[
-          {
-            title: "Swap Tokens",
-            description: "Trade tokens instantly with low fees",
-            link: "/swap",
-          },
-          {
-            title: "Provide Liquidity",
-            description: "Earn fees by providing liquidity",
-            link: "/liquidity",
-          },
-          {
-            title: "Track History",
-            description: "View your trading history",
-            link: "/history",
-          },
-        ].map((item) => (
-          <Link
-            key={item.title}
-            href={item.link}
-            className="p-6 border rounded-xl hover:shadow-lg transition-shadow"
-          >
-            <h2 className="text-2xl font-semibold mb-3">{item.title}</h2>
-            <p className="text-gray-600 dark:text-gray-300">
-              {item.description}
-            </p>
-          </Link>
-        ))}
+        {/* Right: Swap Card */}
+        <SwapCard />
       </div>
     </div>
   );

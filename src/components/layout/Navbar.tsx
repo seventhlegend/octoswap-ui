@@ -4,6 +4,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import LogoWithText from "./LogoWithText";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -33,11 +34,7 @@ export default function Navbar() {
     };
   }, []);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  // Close mobile menu when navigating to a new page
+  // Close mobile menu when navigating
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
@@ -47,96 +44,112 @@ export default function Navbar() {
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-md"
-            : "bg-white dark:bg-gray-900"
-        } border-b`}
+            ? "bg-transparent backdrop-blur-md border-b border-white/10"
+            : "bg-transparent border-b border-transparent"
+        }`}
       >
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-8">
-              <Link href="/" className="text-2xl font-bold">
-                RoarySwap
-              </Link>
-              <div className="hidden md:flex space-x-4">
-                {navItems.map((item) => (
+            {/* Logo */}
+            <Link href="/" className="relative z-10">
+              <LogoWithText />
+            </Link>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-1">
+              {navItems.map((item) => {
+                const isActive = pathname === item.href;
+                return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`px-3 py-2 rounded-lg transition-colors ${
-                      pathname === item.href
-                        ? "bg-gray-100 dark:bg-gray-800"
-                        : "hover:bg-gray-50 dark:hover:bg-gray-900"
-                    }`}
+                    className="relative px-4 py-2 mx-1 rounded-md font-medium transition-all duration-200"
                   >
-                    {item.name}
+                    <span
+                      className={`${
+                        isActive
+                          ? "text-[#011e50]"
+                          : "text-white hover:text-[#011e50]"
+                      }`}
+                    >
+                      {item.name}
+                    </span>
+                    {isActive && (
+                      <span className="absolute left-2 right-2 bottom-1 h-0.5 bg-[#011e50]" />
+                    )}
                   </Link>
-                ))}
-              </div>
+                );
+              })}
             </div>
 
+            {/* Connect Button and Mobile Menu Toggle */}
             <div className="flex items-center space-x-4">
               <div className="hidden md:block">
                 <ConnectButton />
               </div>
 
-              {/* Hamburger menu button for mobile */}
+              {/* Hamburger Menu Button */}
               <button
                 type="button"
-                className="md:hidden p-2 rounded-lg text-gray-600 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none"
-                onClick={toggleMobileMenu}
+                className="md:hidden p-2 rounded-lg text-white hover:bg-white/10 focus:outline-none"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 aria-expanded={isMobileMenuOpen}
                 aria-label="Toggle navigation menu"
               >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  {isMobileMenuOpen ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  )}
-                </svg>
+                <div className="relative w-6 h-6">
+                  <span
+                    className={`absolute left-0 w-full h-0.5 bg-white rounded transform transition-all duration-300 ${
+                      isMobileMenuOpen ? "rotate-45 top-3" : "top-1"
+                    }`}
+                  />
+                  <span
+                    className={`absolute left-0 w-full h-0.5 bg-white rounded top-3 transition-opacity duration-300 ${
+                      isMobileMenuOpen ? "opacity-0" : "opacity-100"
+                    }`}
+                  />
+                  <span
+                    className={`absolute left-0 w-full h-0.5 bg-white rounded transform transition-all duration-300 ${
+                      isMobileMenuOpen ? "-rotate-45 top-3" : "top-5"
+                    }`}
+                  />
+                </div>
               </button>
             </div>
           </div>
 
-          {/* Mobile menu dropdown */}
+          {/* Mobile Navigation Menu */}
           <div
             className={`md:hidden transition-all duration-300 ease-in-out overflow-hidden ${
               isMobileMenuOpen
-                ? "max-h-96 opacity-100 py-2"
+                ? "max-h-[400px] opacity-100 pt-4"
                 : "max-h-0 opacity-0"
             }`}
           >
-            <div className="flex flex-col space-y-3">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`px-3 py-2 rounded-lg transition-colors ${
-                    pathname === item.href
-                      ? "bg-gray-100 dark:bg-gray-800"
-                      : "hover:bg-gray-50 dark:hover:bg-gray-900"
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
-              <div className="py-2">
+            <div className="flex flex-col space-y-2 pb-4">
+              {navItems.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="relative px-4 py-3 rounded-md font-medium transition-all"
+                  >
+                    <span
+                      className={`${
+                        isActive
+                          ? "text-[#011e50]"
+                          : "text-white hover:text-[#011e50]"
+                      }`}
+                    >
+                      {item.name}
+                    </span>
+                    {isActive && (
+                      <span className="absolute left-2 right-2 bottom-1 h-0.5 bg-[#011e50]" />
+                    )}
+                  </Link>
+                );
+              })}
+              <div className="pt-2">
                 <ConnectButton />
               </div>
             </div>
@@ -144,7 +157,7 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Spacer element to push content below navbar */}
+      {/* Spacer to push content below navbar */}
       <div className="h-[72px]"></div>
     </>
   );

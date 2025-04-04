@@ -149,15 +149,15 @@ export default function DeployPage() {
   }, [isSuccess]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-indigo-900 via-purple-800 to-fuchsia-700 py-12 px-4">
-      <div className="max-w-xl w-full bg-black/30 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl">
-        <h2 className="text-white text-2xl font-bold text-center mb-6">
+    <div className="min-h-screen flex flex-col items-center justify-center py-12 px-4">
+      <div className="max-w-xl w-full bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+        <h2 className="text-[#011e50] text-2xl font-bold text-center mb-6">
           Deploy Your Token/Collection
         </h2>
 
         <div className="space-y-4">
           <select
-            className="w-full p-3 rounded-xl bg-white/10 text-white"
+            className="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 text-[#011e50]"
             value={form.type}
             onChange={(e) => setForm({ ...form, type: e.target.value })}
           >
@@ -169,7 +169,7 @@ export default function DeployPage() {
           <input
             type="text"
             placeholder="Name"
-            className="w-full p-3 rounded-xl bg-white/10 text-white"
+            className="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 text-[#011e50]"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
@@ -177,7 +177,7 @@ export default function DeployPage() {
           <input
             type="text"
             placeholder="Symbol"
-            className="w-full p-3 rounded-xl bg-white/10 text-white"
+            className="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 text-[#011e50]"
             value={form.symbol}
             onChange={(e) => setForm({ ...form, symbol: e.target.value })}
             disabled={form.type === "erc1155"}
@@ -187,7 +187,7 @@ export default function DeployPage() {
             <input
               type="text"
               placeholder="Base URI (e.g., ipfs://...)"
-              className="w-full p-3 rounded-xl bg-white/10 text-white"
+              className="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 text-[#011e50]"
               value={form.baseURI}
               onChange={(e) => setForm({ ...form, baseURI: e.target.value })}
             />
@@ -197,7 +197,7 @@ export default function DeployPage() {
             <input
               type="number"
               placeholder="Initial Supply"
-              className="w-full p-3 rounded-xl bg-white/10 text-white"
+              className="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 text-[#011e50]"
               value={form.supply}
               onChange={(e) => setForm({ ...form, supply: e.target.value })}
             />
@@ -206,19 +206,19 @@ export default function DeployPage() {
           <button
             onClick={handleDeploy}
             disabled={!isConnected || isLoading}
-            className="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl"
+            className="w-full py-3 bg-[#011e50] hover:bg-blue-700 text-white rounded-xl disabled:bg-gray-200 disabled:text-gray-400"
           >
             {isLoading ? "Confirming..." : "Deploy Now (0.01 ETH)"}
           </button>
 
           {status && (
-            <div className="text-white text-center mt-2 text-sm">
+            <div className="text-[#011e50] text-center mt-2 text-sm">
               {status}
               {txHash && (
                 <div>
                   <a
                     href={`https://shannon-explorer.somnia.network/tx/${txHash}`}
-                    className="text-purple-300 underline"
+                    className="text-[#011e50] hover:text-blue-700 underline"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -234,9 +234,29 @@ export default function DeployPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-6 text-center bg-white/10 backdrop-blur-md rounded-xl px-6 py-4 text-white border border-white/10"
+            className="mt-6 text-center bg-white/80 backdrop-blur-md rounded-xl px-8 py-6 text-[#011e50] border border-gray-200 shadow-lg"
           >
-            Connect your wallet to deploy contracts
+            <div className="mb-2">
+              <svg
+                className="w-12 h-12 mx-auto text-[#011e50]/70"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
+            </div>
+            <p className="font-medium text-lg">
+              Connect your wallet to deploy contracts
+            </p>
+            <p className="text-sm text-[#011e50]/60 mt-1">
+              Use the connect button in the navigation bar
+            </p>
           </motion.div>
         )}
       </div>

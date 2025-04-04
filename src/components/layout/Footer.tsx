@@ -1,17 +1,15 @@
 export default function Footer() {
   return (
-    <footer className="border-t mt-auto">
+    <footer className="relative z-10 border-t mt-auto bg-white/50 backdrop-blur-sm">
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-blue-950">
           <div>
-            <h3 className="font-bold text-lg mb-4">RoarySwap</h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              The next generation decentralized exchange platform
-            </p>
+            <h3 className="font-bold text-lg mb-4 text-white">RoarySwap</h3>
+            <p className="text-blue-950 dark:text-blue-900"></p>
           </div>
           <div>
-            <h3 className="font-bold text-lg mb-4">Quick Links</h3>
-            <ul className="space-y-2">
+            <h3 className="font-bold text-lg mb-4 ">Quick Links</h3>
+            <ul className="space-y-2 ">
               <li>
                 <a href="/about" className="hover:underline">
                   About
